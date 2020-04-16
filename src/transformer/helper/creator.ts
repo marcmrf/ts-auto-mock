@@ -56,12 +56,12 @@ export namespace TypescriptCreator {
     return ts.createPropertySignature([], propertyName, undefined, type, undefined);
   }
 
-  export function createParameter(parameterName: string): ts.ParameterDeclaration {
+  export function createParameter(identifier: ts.Identifier): ts.ParameterDeclaration {
     return ts.createParameter(
       undefined,
       undefined,
       undefined,
-      ts.createIdentifier(parameterName),
+      identifier,
       undefined,
       undefined,
       undefined,

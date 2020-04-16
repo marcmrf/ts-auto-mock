@@ -5,7 +5,7 @@ import { GetProperties } from '../descriptor/properties/properties';
 import { GetTypeofEnumDescriptor } from '../descriptor/typeQuery/enumTypeQuery';
 import { TypescriptCreator } from '../helper/creator';
 import { createImportOnIdentifier } from '../helper/import';
-import { MockIdentifierGenericParameter } from '../mockIdentifier/mockIdentifier';
+import { MockIdentifierGenericParameter, MockIdentifierShouldUseRandomValues } from '../mockIdentifier/mockIdentifier';
 import { PrivateIdentifier } from '../privateIdentifier/privateIdentifier';
 import { Scope } from '../scope/scope';
 import { DeclarationCache } from './cache/declarationCache';
@@ -119,8 +119,9 @@ export class MockDefiner {
     const descriptor: ts.Expression = GetDescriptor(declaration, new Scope(key));
 
     const mockGenericParameter: ts.ParameterDeclaration = this._getMockGenericParameter();
+    const mockShouldUseRandomValuesParameter: ts.ParameterDeclaration = this._getShouldUseRandomValuesParameter();
 
-    const factory: ts.FunctionExpression = TypescriptCreator.createFunctionExpressionReturn(descriptor, [mockGenericParameter]);
+    const factory: ts.FunctionExpression = TypescriptCreator.createFunctionExpressionReturn(descriptor, [mockGenericParameter, mockShouldUseRandomValuesParameter]);
 
     this._factoryRegistrationsPerFile[thisFileName].push({
       key: declaration,
@@ -226,8 +227,9 @@ export class MockDefiner {
     const descriptor: ts.Expression = GetProperties(intersectionTypeNode, new Scope(key));
 
     const mockGenericParameter: ts.ParameterDeclaration = this._getMockGenericParameter();
+    const mockShouldUseRandomValuesParameter: ts.ParameterDeclaration = this._getShouldUseRandomValuesParameter();
 
-    const factory: ts.FunctionExpression = TypescriptCreator.createFunctionExpressionReturn(descriptor, [mockGenericParameter]);
+    const factory: ts.FunctionExpression = TypescriptCreator.createFunctionExpressionReturn(descriptor, [mockGenericParameter, mockShouldUseRandomValuesParameter]);
 
     this._factoryIntersectionsRegistrationsPerFile[thisFileName].push({
       keys: declarations,
@@ -311,5 +313,9 @@ export class MockDefiner {
 
   private _getMockGenericParameter(): ts.ParameterDeclaration {
     return ts.createParameter([], [], undefined, MockIdentifierGenericParameter);
+  }
+
+  private _getShouldUseRandomValuesParameter(): ts.ParameterDeclaration {
+    return ts.createParameter([], [], undefined, MockIdentifierShouldUseRandomValues);
   }
 }

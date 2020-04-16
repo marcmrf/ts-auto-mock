@@ -1,4 +1,4 @@
-import { createMock } from 'ts-auto-mock';
+import { createMock, createMockWithRandomValues } from 'ts-auto-mock';
 
 /*
  USE THIS FILE ONLY FOR TESTING NEW IMPLEMENTATION
@@ -8,11 +8,31 @@ import { createMock } from 'ts-auto-mock';
 
  */
 
-it('should work', () => {
+
+describe('create-mock-with-random-values', () => {
   interface A {
-    a: string;
+    // eslint-disable-next-line @typescript-eslint/prefer-function-type
+    (): string;
   }
 
-  const type: A = createMock<A>();
-  expect(type).toBeDefined();
+  interface B {
+    // eslint-disable-next-line @typescript-eslint/prefer-function-type
+    (): number;
+  }
+
+  interface C {
+    prop: A & B;
+  }
+
+
+  it('should give the default value ', () => {
+    // @ts-ignore
+    const mock: string = createMock<string>();
+    // @ts-ignore
+    const mock2: number = createMock<number>();
+    expect(mock).toBe('');
+    // @ts-ignore
+    expect(mock2).toBe(0);
+  });
 });
+

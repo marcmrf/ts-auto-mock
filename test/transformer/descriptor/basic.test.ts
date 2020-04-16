@@ -1,17 +1,6 @@
 import { createMock } from 'ts-auto-mock';
 
 describe('for simple properties', () => {
-  describe('for declared interface with string', () => {
-    interface Interface {
-      a: string;
-    }
-
-    it('should set an empty string', () => {
-      const properties: Interface = createMock<Interface>();
-      expect(properties.a).toBe('');
-    });
-  });
-
   describe('for declared interface with number', () => {
     interface Interface {
       a: number;

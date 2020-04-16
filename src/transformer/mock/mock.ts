@@ -11,6 +11,12 @@ function getMockExpression(nodeToMock: ts.TypeNode): ts.Expression {
   return GetDescriptor(nodeToMock, new Scope());
 }
 
+function getMockExpressionWithRandomValues(nodeToMock: ts.TypeNode): ts.Expression {
+  const scope: Scope = new Scope();
+  scope.shouldSetRandomValues = true;
+  return GetDescriptor(nodeToMock, scope);
+}
+
 function hasDefaultValues(node: ts.CallExpression): boolean {
   return node.arguments.length && !!node.arguments[0];
 }
@@ -34,6 +40,16 @@ function getMockListExpression(mock: ts.Expression, length: number): ts.Expressi
 
 export function getMock(nodeToMock: ts.TypeNode, node: ts.CallExpression): ts.Expression {
   const mockExpression: ts.Expression = getMockExpression(nodeToMock);
+
+  if (hasDefaultValues(node)) {
+    return getMockMergeExpression(mockExpression, node.arguments[0]);
+  }
+
+  return mockExpression;
+}
+
+export function getMockWithRandomValues(nodeToMock: ts.TypeNode, node: ts.CallExpression): ts.Expression {
+  const mockExpression: ts.Expression = getMockExpressionWithRandomValues(nodeToMock);
 
   if (hasDefaultValues(node)) {
     return getMockMergeExpression(mockExpression, node.arguments[0]);

@@ -2,7 +2,11 @@ import * as ts from 'typescript';
 import { GetDescriptor } from '../descriptor/descriptor';
 import { TypescriptHelper } from '../descriptor/helper/helper';
 import { TypescriptCreator } from '../helper/creator';
-import { MockIdentifierGenericParameterIds, MockIdentifierGenericParameterValue } from '../mockIdentifier/mockIdentifier';
+import {
+  MockIdentifierGenericParameterIds,
+  MockIdentifierGenericParameterValue,
+  MockIdentifierShouldUseRandomValues,
+} from '../mockIdentifier/mockIdentifier';
 import { Scope } from '../scope/scope';
 import { IGenericDeclaration } from './genericDeclaration.interface';
 import { GenericDeclarationSupported } from './genericDeclarationSupported';
@@ -38,9 +42,11 @@ export function GenericDeclaration(scope: Scope): IGenericDeclaration {
 
   function createGenericParameter(ownerKey: string, nodeOwnerParameter: ts.TypeParameterDeclaration, genericDescriptor: ts.Expression): GenericParameter {
     const uniqueName: string = ownerKey + nodeOwnerParameter.name.escapedText;
-    const genericFunction: ts.FunctionExpression = TypescriptCreator.createFunctionExpression(ts.createBlock(
-      [ts.createReturn(genericDescriptor)],
-    ));
+    const genericFunction: ts.FunctionExpression = TypescriptCreator.createFunctionExpression(
+      ts.createBlock(
+        [ts.createReturn(genericDescriptor)]),
+      [TypescriptCreator.createParameter(MockIdentifierShouldUseRandomValues)]
+    );
 
     return {
       ids: [uniqueName],

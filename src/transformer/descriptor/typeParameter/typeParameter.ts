@@ -1,7 +1,12 @@
 import * as ts from 'typescript';
 import { TypescriptCreator } from '../../helper/creator';
 import { MockDefiner } from '../../mockDefiner/mockDefiner';
-import { MockIdentifierGenericParameter, MockIdentifierGenericParameterIds, MockIdentifierGenericParameterValue } from '../../mockIdentifier/mockIdentifier';
+import {
+  MockIdentifierGenericParameter,
+  MockIdentifierGenericParameterIds,
+  MockIdentifierGenericParameterValue,
+  MockIdentifierShouldUseRandomValues,
+} from '../../mockIdentifier/mockIdentifier';
 import { Scope } from '../../scope/scope';
 import { TypeChecker } from '../../typeChecker/typeChecker';
 import { GetDescriptor } from '../descriptor';
@@ -64,7 +69,7 @@ function createFindGeneric(genericKey: string): ts.CallExpression {
         ts.createNumericLiteral('0'),
       ))],
       true,
-    ), [TypescriptCreator.createParameter('generic')])],
+    ), [TypescriptCreator.createParameter(ts.createIdentifier('generic'))])],
   );
 }
 
@@ -92,7 +97,7 @@ function getValueFromGenericIfExist(): ts.IfStatement {
           MockIdentifierGenericParameterValue,
         ),
         undefined,
-        [],
+        [MockIdentifierShouldUseRandomValues],
       ))],
       true,
     ),

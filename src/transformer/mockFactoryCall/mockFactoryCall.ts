@@ -7,7 +7,7 @@ import {
   GenericDeclarationSupported,
 } from '../genericDeclaration/genericDeclarationSupported';
 import { MockDefiner } from '../mockDefiner/mockDefiner';
-import { MockIdentifierGenericParameter } from '../mockIdentifier/mockIdentifier';
+import { MockIdentifierGenericParameter, MockIdentifierShouldUseRandomValues } from '../mockIdentifier/mockIdentifier';
 import { Scope } from '../scope/scope';
 import { TypescriptCreator } from '../helper/creator';
 
@@ -46,7 +46,7 @@ export function GetMockFactoryCallIntersection(intersection: ts.IntersectionType
 
   return TypescriptCreator.createCall(
     mockFactoryCall,
-    [ts.createArrayLiteral(genericsParametersExpression)],
+    [ts.createArrayLiteral(genericsParametersExpression), ts.createLiteral(scope.shouldSetRandomValues)],
   );
 }
 
@@ -64,7 +64,7 @@ export function GetMockFactoryCallForThis(mockKey: string): ts.Expression {
 
   return TypescriptCreator.createCall(
     mockFactoryCall,
-    [MockIdentifierGenericParameter],
+    [MockIdentifierGenericParameter, MockIdentifierShouldUseRandomValues],
   );
 }
 
@@ -81,7 +81,7 @@ function getDeclarationMockFactoryCall(declaration: ts.Declaration, typeReferenc
 
   return TypescriptCreator.createCall(
     mockFactoryCall,
-    [ts.createArrayLiteral(genericsParametersExpression)],
+    [ts.createArrayLiteral(genericsParametersExpression), ts.createLiteral(scope.shouldSetRandomValues)],
   );
 }
 

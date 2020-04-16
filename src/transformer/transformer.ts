@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import { TsAutoMockOptions } from '../options/options';
 import { CustomFunction } from './matcher/matcher';
-import { getMock, getMockForList, storeRegisterMock } from './mock/mock';
+import { getMock, getMockForList, getMockWithRandomValues, storeRegisterMock } from './mock/mock';
 import { baseTransformer } from './base/base';
 
 const customFunctions: CustomFunction[] = [
@@ -17,6 +17,10 @@ const customFunctions: CustomFunction[] = [
     sourceDts: 'register-mock.d.ts',
     sourceUrl: '../register-mock.d.ts',
   },
+  {
+    sourceDts: 'create-mock-with-random-values.d.ts',
+    sourceUrl: '../create-mock-with-random-values.d.ts',
+  },
 ];
 
 const transformer:
@@ -30,6 +34,10 @@ function visitNode(node: ts.CallExpression, declaration: ts.FunctionDeclaration)
 
   if (isCreateMock(declaration)) {
     return getMock(nodeToMock, node);
+  }
+
+  if (isCreateMockWithRandomValues(declaration)) {
+    return getMockWithRandomValues(nodeToMock, node);
   }
 
   if (isCreateMockList(declaration)) {
@@ -53,4 +61,8 @@ function isCreateMockList(declaration: ts.FunctionDeclaration): boolean {
 
 function isRegisterMock(declaration: ts.FunctionDeclaration): boolean {
   return declaration.name && declaration.name.getText() === 'registerMock';
+}
+
+function isCreateMockWithRandomValues(declaration: ts.FunctionDeclaration): boolean {
+  return declaration?.name?.getText() === 'createMockWithRandomValues';
 }
